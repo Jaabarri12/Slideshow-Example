@@ -4,8 +4,92 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example Cinematic</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.js" integrity="sha512-H05oT7BAjM9Ai1IaFX9zr61NtE2e1P0MkTz3AZXBnseaJSAOt2FGMFJ+vVGutaJxEGA1jxUiYsTBYQNE08/Erw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Rock</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.60.0/phaser.js" 
+    integrity="sha512-H05oT7BAjM9Ai1IaFX9zr61NtE2e1P0MkTz3AZXBnseaJSAOt2FGMFJ+vVGutaJxEGA1jxUiYsTBYQNE08/Erw==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+
+        class Scene0 extends Phaser.Scene {
+            constructor (){
+                super({key: 'Scene0'});
+            }
+
+            create()
+            {
+                this.input.once('pointerdown', function () 
+                {
+                    this.scene.start('sceneA');
+                }, this);
+            }
+        }
+
+        class SceneA extends Phaser.Scene {
+            constructor () {
+                super({key: 'sceneA'});
+            }
+
+            preload()
+            {
+                this.load.image('quackStudio', 'assets/pics/duck.png');
+                this.load.audio('quack', ['assets/audio/quack.mp3']);
+            }
+
+            create()
+            {
+
+                const duck = this.add.sprite((window.innerWidth)/2,(window.innerHeight)/2,'quackStudio'); // Adds Duck image in game
+                // Duck Height/Width
+                duck.displayWidth = 1668/2;
+                duck.displayHeight = 2388/2;
+
+                // Audio that will play when the image loads
+                let audio = this.sound.add('quack');
+                audio.play();
+
+                this.cameras.main.once('camerafadeincomplete', function (camera){
+                    camera.fadeOut(2000);
+                })
+
+                this.cameras.main.fadeIn(2000);
+                
+                this.time.addEvent({
+                    delay:4000,
+                    loop:false,
+                    callback: () => {
+                        this.scene.start('sceneB');
+                    }
+                })
+            }
+        }
+
+        class SceneB extends Phaser.Scene {
+            constructor () {
+                super({key: 'sceneB'});
+            }
+            
+            preload() 
+            {
+
+            }
+
+            create (){
+                this.cameras.main.fadeIn(2000);
+            }
+            //this.cameras.main.fadeIn(2000);
+        }
+
+ 
+
+        
+
+        let game = new Phaser.Game({
+            width: window.innerWidth,
+            height: window.innerHeight,
+            scene: [Scene0, SceneA, SceneB],
+            backgroundColor: 0xFFFFFF
+        });
+    </script>
 </head>
 <body>
     
