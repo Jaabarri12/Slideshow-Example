@@ -38,7 +38,7 @@
             create()
             {
 
-                const duck = this.add.sprite((window.innerWidth)/2,(window.innerHeight)/2,'quackStudio'); // Adds Duck image in game
+                const duck = this.add.image((window.innerWidth)/2,(window.innerHeight)/2,'quackStudio'); // Adds Duck image in game
                 // Duck Height/Width
                 duck.displayWidth = 1668/2;
                 duck.displayHeight = 2388/2;
@@ -47,19 +47,20 @@
                 let audio = this.sound.add('quack');
                 audio.play();
 
-                this.cameras.main.once('camerafadeincomplete', function (camera){
-                    camera.fadeOut(2000);
-                })
+                // this.cameras.main.once('camerafadeincomplete', function (camera){
+                //     camera.fadeOut(2000);
+                // })
 
                 this.cameras.main.fadeIn(2000);
                 
-                this.time.addEvent({
-                    delay:4000,
-                    loop:false,
-                    callback: () => {
-                        this.scene.start('sceneB');
-                    }
-                })
+                this.input.keyboard.once('keydown-SPACE', () => {
+		            // fade to black
+		            this.cameras.main.fadeOut(1000, 0, 0, 0)
+	            })
+
+	            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
+		            this.scene.start('sceneB')
+	            })
             }
         }
 
@@ -70,13 +71,52 @@
             
             preload() 
             {
+                this.load.image('mountainL', 'assets/pics/mountainL.png');
+                this.load.image('mountainM', 'assets/pics/mountainM.png');
+                this.load.image('mountainR', 'assets/pics/mountainR.png');
 
             }
 
             create (){
-                this.cameras.main.fadeIn(2000);
+
+
+                this.cameras.main.fadeIn(1000,0,0,0);
+                //250 constant
+                const mountainL = this.add.image((window.innerWidth)/2,(window.innerHeight)+500,'mountainL');
+                const mountainM = this.add.image((window.innerWidth)/2, (window.innerHeight)+1500, 'mountainM');
+                const mountainR = this.add.image((window.innerWidth)/2,(window.innerHeight)+1000, 'mountainR');
+
+            this.tweens.add({
+                targets: mountainL,
+                y: 500,
+                duration: 1000,
+                //repeat: -1,
+                //hold: 500,
+                //repeatDelay: 500,
+                ease: 'cubic.in'
+        });
+
+            this.tweens.add({
+                targets: mountainR,
+                y: 500,
+                duration: 2000,
+                //repeat: -1,
+                //hold: 500,
+                //repeatDelay: 500,
+                ease: 'cubic.in'
+        });
+
+            this.tweens.add({
+                targets: mountainM,
+                y: 500,
+                duration: 2500,
+                //repeat: -1,
+                //hold: 500,
+                //repeatDelay: 500,
+                ease: 'cubic.in'
+        });
+
             }
-            //this.cameras.main.fadeIn(2000);
         }
 
  
