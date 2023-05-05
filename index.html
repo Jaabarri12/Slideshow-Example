@@ -10,6 +10,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
 
+        //First scene for audio to play by getting some form of input from user
         class Scene0 extends Phaser.Scene {
             constructor (){
                 super({key: 'Scene0'});
@@ -17,14 +18,17 @@
 
             create()
             {
+                // Adds Rectangle and some text to start(mainly for requirments lol)
                 this.add.rectangle(750, 325, 1000, 100, '0xff0000');
                 this.add.text(400, 300, 'Press Space to Continue...',{fontSize: '50px', fill: '#000'});
+                // Starts next scene when space is pressed
                 this.input.keyboard.once('keydown-SPACE', () => {
                     this.scene.start('sceneA');
                 });
             }
         }
 
+        // First Actualy Scene
         class SceneA extends Phaser.Scene {
             constructor () {
                 super({key: 'sceneA'});
@@ -32,13 +36,14 @@
 
             preload()
             {
+                // Preloaded some images and audio
                 this.load.image('quackStudio', 'assets/pics/duck.png');
                 this.load.audio('quack', ['assets/audio/quack.mp3']);
             }
 
             create()
             {
-
+                // Preload a lot of stuff for the next scene to avoid screen flicker
                 this.load.audio('boom','assets/audio/boom.mp3');
                 this.load.image('mountainL', 'assets/pics/mountainL.png');
                 this.load.image('mountainM', 'assets/pics/mountainM.png');
@@ -46,6 +51,7 @@
                 this.loadingDone = new Promise(resolve => this.load.on(Phaser.Loader.Events.COMPLETE, () => resolve()))
                 this.load.start()
 
+                // Adds the duck to this scene and positions him to the center of the screen
                 const duck = this.add.image((window.innerWidth)/2,(window.innerHeight)/2,'quackStudio'); // Adds Duck image in game
                 // Duck Height/Width
                 duck.displayWidth = 1668/2;
@@ -55,19 +61,22 @@
                 let audio = this.sound.add('quack');
                 audio.play();
 
+                // Fading into the scene
                 this.cameras.main.fadeIn(2000);
                 
+                // When space is pressed scene begins to fade out
                 this.input.keyboard.once('keydown-SPACE', () => {
-		            // fade to black
 		            this.cameras.main.fadeOut(1000, 0, 0, 0)
 	            });
 
+                // Starts the next scene when the assets are all done loading(avoid screen flicker between scenes)
 	            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
 		            this.loadingDone.then(() => this.scene.start('sceneB'))
 	            })
             }
         }
 
+        // The second Scene of the intro
         class SceneB extends Phaser.Scene {
             constructor () {
                 super({key: 'sceneB'});
@@ -79,23 +88,28 @@
 
             create (){
 
+                // Adding some of the art for the theme of the game/fading in
                 this.cameras.main.fadeIn(1000,0,0,0);
                 const mountainL = this.add.image((window.innerWidth)/2,(window.innerHeight)+500,'mountainL');
                 const mountainM = this.add.image((window.innerWidth)/2, (window.innerHeight)+1500, 'mountainM');
                 const mountainR = this.add.image((window.innerWidth)/2,(window.innerHeight)+1000, 'mountainR');
 
+                // Plays the audio for the art coming in
                 let audio = this.sound.add('boom');
                 audio.play();
 
+                // Some text to get the game going
                 const text = this.add.text(20, 40, 'In a world full of rocks...',{fontSize: '32px', fill: '#000'});
 
+                // Brings in the mountains from the bottom of the screen
                 this.tweens.add({
                     targets: mountainL,
                     y: 500,
                     duration: 1000,
                     ease: 'cubic.in'
                 });
-
+                
+                // Brings in the next mountain from the bottom of the screen
                 this.tweens.add({
                     targets: mountainR,
                     y: 500,
@@ -103,6 +117,7 @@
                     ease: 'cubic.in'
                 });
 
+                // Brings in the next mountain from the bottom of the screen
                 this.tweens.add({
                     targets: mountainM,
                     y: 500,
@@ -113,7 +128,7 @@
             }
         }
      
-
+        // Some configs for the game window and scenes
         let game = new Phaser.Game({
             width: window.innerWidth,
             height: window.innerHeight,
