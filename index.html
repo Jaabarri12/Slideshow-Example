@@ -28,7 +28,7 @@
             }
         }
 
-        // First Actualy Scene
+        // First Actual Scene
         class SceneA extends Phaser.Scene {
             constructor () {
                 super({key: 'sceneA'});
@@ -86,7 +86,7 @@
             {
             }
 
-            create (){
+            create () {
 
                 // Adding some of the art for the theme of the game/fading in
                 this.cameras.main.fadeIn(1000,0,0,0);
@@ -125,14 +125,59 @@
                     ease: 'cubic.in'
                 });
 
+                   // When space is pressed scene begins to fade out
+                this.input.keyboard.once('keydown-SPACE', () => {
+		            this.tweens.add({
+                        targets: mountainL,
+                        x: -1000,
+                        duration: 1000 ,
+                        ease: 'cubic.in'
+                    });
+
+                    this.tweens.add({
+                        targets: mountainR,
+                        x: 5000,
+                        duration: 1200,
+                        ease: 'cubic.in'
+                    });
+
+                    this.tweens.add({
+                        targets: mountainM,
+                        y: -3000,
+                        duration: 1500,
+                        ease: 'cubic.in'
+                    });
+
+                    this.tweens.add({
+                        targets: text,
+                        x: -1000,
+                        duration: 1000,
+                        ease: 'cubic.in'
+                    });
+                    
+	            });
+
             }
+        }
+        
+        class SceneC extends Phaser.scene {
+          constructor () {
+            super({key: 'sceneC'});
+          }   
+          preload(){
+
+          } 
+          create (){
+
+          } 
+
         }
      
         // Some configs for the game window and scenes
         let game = new Phaser.Game({
             width: window.innerWidth,
             height: window.innerHeight,
-            scene: [Scene0, SceneA, SceneB],
+            scene: [Scene0, SceneA, SceneB, SceneC],
             backgroundColor: 0xFFFFFF
         });
     </script>
