@@ -88,6 +88,17 @@
 
             create () {
 
+                this.load.image('cliffOne', 'assets/pics/cliffLeft.png');
+                this.load.image('grass', 'assets/pics/grassFirst.png');
+                this.load.image('cliffTwo', 'assets/pics/cliffSecond.png');
+                this.load.image('cliffThree', 'assets/pics/cliffThird.png');
+                this.load.image('sky', 'assets/pics/Skytop.png');
+                this.load.audio('theme', 'assets/audio/titleMusic.mp3');
+                this.load.image('titleM', 'assets/pics/title.png');
+                this.loadingDone = new Promise(resolve => this.load.on(Phaser.Loader.Events.COMPLETE, () => resolve()))
+                this.load.start()
+
+
                 // Adding some of the art for the theme of the game/fading in
                 this.cameras.main.fadeIn(1000,0,0,0);
                 const mountainL = this.add.image((window.innerWidth)/2,(window.innerHeight)+500,'mountainL');
@@ -154,20 +165,97 @@
                         duration: 1000,
                         ease: 'cubic.in'
                     });
-                    
+
+                    this.time.addEvent({
+                        delay: 1000,
+                        callback: ()=>{
+                            this.cameras.main.fadeOut(1000, 0, 0, 0)
+                            this.time.addEvent({
+                                delay: 1000,
+                                callback: () => {
+                                    this.loadingDone.then(() => this.scene.start('sceneC'))
+                                },
+                            })
+                        },
+                    }) 
 	            });
+
+
 
             }
         }
         
-        class SceneC extends Phaser.scene {
+        class SceneC extends Phaser.Scene {
           constructor () {
             super({key: 'sceneC'});
           }   
           preload(){
+            
 
           } 
           create (){
+            this.cameras.main.fadeIn(1000,0,0,0);
+
+            
+            const sky = this.add.image(600,-700,'sky'); 
+            const cliffTh = this.add.image(870,1500,'cliffThree');
+            const cliffT = this.add.image(900,1300,'cliffTwo');
+            const grass = this.add.image(900,1300,'grass');
+            const cliffO = this.add.image(((window.innerWidth)/2+275) - 1000 ,(window.innerHeight)-50,'cliffOne');
+            const title = this.add.image(1800,150 ,'titleM');
+
+
+            this.time.addEvent({
+                delay: 1000,
+                callback: () => {
+                    let audio =  this.sound.add('theme');
+                    audio.play();
+                },
+            })
+
+            this.tweens.add({
+                targets: title,
+                x: 1050,
+                duration: 1000,
+                ease: 'cubic.in'
+            });
+
+
+            this.tweens.add({
+                targets: cliffO,
+                x: 1017,
+                duration: 1000,
+                ease: 'cubic.in'
+            });
+
+            this.tweens.add({
+                targets: grass,
+                y: 285 ,
+                duration: 1050,
+                ease: 'cubic.in'
+            });
+
+            this.tweens.add({
+                targets: sky,
+                y: 780,
+                duration: 1050,
+                ease: 'cubic.in'
+            });
+
+            this.tweens.add({
+                targets: cliffT,
+                y: 290,
+                duration: 1300,
+                ease: 'cubic.in'
+            });
+
+            this.tweens.add({
+                targets: cliffTh,
+                y: 500,
+                duration: 1500,
+                ease: 'cubic.in'
+            });
+            
 
           } 
 
