@@ -17,10 +17,11 @@
 
             create()
             {
-                this.input.once('pointerdown', function () 
-                {
+                this.add.rectangle(750, 325, 1000, 100, '0xff0000');
+                this.add.text(400, 300, 'Press Space to Continue...',{fontSize: '50px', fill: '#000'});
+                this.input.keyboard.once('keydown-SPACE', () => {
                     this.scene.start('sceneA');
-                }, this);
+                });
             }
         }
 
@@ -54,16 +55,12 @@
                 let audio = this.sound.add('quack');
                 audio.play();
 
-                // this.cameras.main.once('camerafadeincomplete', function (camera){
-                //     camera.fadeOut(2000);
-                // })
-
                 this.cameras.main.fadeIn(2000);
                 
                 this.input.keyboard.once('keydown-SPACE', () => {
 		            // fade to black
 		            this.cameras.main.fadeOut(1000, 0, 0, 0)
-	            })
+	            });
 
 	            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
 		            this.loadingDone.then(() => this.scene.start('sceneB'))
@@ -82,9 +79,7 @@
 
             create (){
 
-
                 this.cameras.main.fadeIn(1000,0,0,0);
-                //250 constant
                 const mountainL = this.add.image((window.innerWidth)/2,(window.innerHeight)+500,'mountainL');
                 const mountainM = this.add.image((window.innerWidth)/2, (window.innerHeight)+1500, 'mountainM');
                 const mountainR = this.add.image((window.innerWidth)/2,(window.innerHeight)+1000, 'mountainR');
@@ -92,33 +87,32 @@
                 let audio = this.sound.add('boom');
                 audio.play();
 
-            this.tweens.add({
-                targets: mountainL,
-                y: 500,
-                duration: 1000,
-                ease: 'cubic.in'
-        });
+                const text = this.add.text(20, 40, 'In a world full of rocks...',{fontSize: '32px', fill: '#000'});
 
-            this.tweens.add({
-                targets: mountainR,
-                y: 500,
-                duration: 1400,
-                ease: 'cubic.in'
-        });
+                this.tweens.add({
+                    targets: mountainL,
+                    y: 500,
+                    duration: 1000,
+                    ease: 'cubic.in'
+                });
 
-            this.tweens.add({
-                targets: mountainM,
-                y: 500,
-                duration: 1750,
-                ease: 'cubic.in'
-        });
+                this.tweens.add({
+                    targets: mountainR,
+                    y: 500,
+                    duration: 1400,
+                    ease: 'cubic.in'
+                });
+
+                this.tweens.add({
+                    targets: mountainM,
+                    y: 500,
+                    duration: 1750,
+                    ease: 'cubic.in'
+                });
 
             }
         }
-
- 
-
-        
+     
 
         let game = new Phaser.Game({
             width: window.innerWidth,
