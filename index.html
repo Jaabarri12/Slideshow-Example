@@ -204,6 +204,9 @@
             const cliffO = this.add.image(((window.innerWidth)/2+275) - 1000 ,(window.innerHeight)-50,'cliffOne');
             const title = this.add.image(1800,150 ,'titleM');
 
+            const start = this.add.text(1800, 300, 'Start',{fontSize: '50px', fill: '#000'});
+            const options = this.add.text(-1400, 400, 'Options',{fontSize: '50px', fill: '#000'});
+
 
             this.time.addEvent({
                 delay: 1000,
@@ -212,6 +215,20 @@
                     audio.play();
                 },
             })
+
+            this.tweens.add({
+                targets: start,
+                x: 800,
+                duration: 1000,
+                ease: 'cubic.in'
+            });
+
+            this.tweens.add({
+                targets: options,
+                x: 400,
+                duration: 1000,
+                ease: 'cubic.in'
+            });
 
             this.tweens.add({
                 targets: title,
