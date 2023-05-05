@@ -38,6 +38,13 @@
             create()
             {
 
+                this.load.audio('boom','assets/audio/boom.mp3');
+                this.load.image('mountainL', 'assets/pics/mountainL.png');
+                this.load.image('mountainM', 'assets/pics/mountainM.png');
+                this.load.image('mountainR', 'assets/pics/mountainR.png');
+                this.loadingDone = new Promise(resolve => this.load.on(Phaser.Loader.Events.COMPLETE, () => resolve()))
+                this.load.start()
+
                 const duck = this.add.image((window.innerWidth)/2,(window.innerHeight)/2,'quackStudio'); // Adds Duck image in game
                 // Duck Height/Width
                 duck.displayWidth = 1668/2;
@@ -59,7 +66,7 @@
 	            })
 
 	            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, (cam, effect) => {
-		            this.scene.start('sceneB')
+		            this.loadingDone.then(() => this.scene.start('sceneB'))
 	            })
             }
         }
@@ -71,10 +78,6 @@
             
             preload() 
             {
-                this.load.image('mountainL', 'assets/pics/mountainL.png');
-                this.load.image('mountainM', 'assets/pics/mountainM.png');
-                this.load.image('mountainR', 'assets/pics/mountainR.png');
-
             }
 
             create (){
@@ -86,33 +89,27 @@
                 const mountainM = this.add.image((window.innerWidth)/2, (window.innerHeight)+1500, 'mountainM');
                 const mountainR = this.add.image((window.innerWidth)/2,(window.innerHeight)+1000, 'mountainR');
 
+                let audio = this.sound.add('boom');
+                audio.play();
+
             this.tweens.add({
                 targets: mountainL,
                 y: 500,
                 duration: 1000,
-                //repeat: -1,
-                //hold: 500,
-                //repeatDelay: 500,
                 ease: 'cubic.in'
         });
 
             this.tweens.add({
                 targets: mountainR,
                 y: 500,
-                duration: 2000,
-                //repeat: -1,
-                //hold: 500,
-                //repeatDelay: 500,
+                duration: 1400,
                 ease: 'cubic.in'
         });
 
             this.tweens.add({
                 targets: mountainM,
                 y: 500,
-                duration: 2500,
-                //repeat: -1,
-                //hold: 500,
-                //repeatDelay: 500,
+                duration: 1750,
                 ease: 'cubic.in'
         });
 
