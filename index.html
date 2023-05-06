@@ -87,7 +87,9 @@
             }
 
             create () {
+                
 
+                // Preload all the stuff for the next Scene to avoid screen flicker when fading out
                 this.load.image('cliffOne', 'assets/pics/cliffLeft.png');
                 this.load.image('grass', 'assets/pics/grassFirst.png');
                 this.load.image('cliffTwo', 'assets/pics/cliffSecond.png');
@@ -109,9 +111,13 @@
                 let audio = this.sound.add('boom');
                 audio.play();
 
+                // Random rectangle to meet some requirments under some text
+                const rect = this.add.rectangle(20, 55, 1100  , 50,'0x0000FF'); 
+
                 // Some text to get the game going
                 const text = this.add.text(20, 40, 'In a world full of rocks...',{fontSize: '32px', fill: '#000'});
 
+                
                 // Brings in the mountains from the bottom of the screen
                 this.tweens.add({
                     targets: mountainL,
@@ -136,7 +142,7 @@
                     ease: 'cubic.in'
                 });
 
-                   // When space is pressed scene begins to fade out
+                // When space is pressed all images on screen will begin to move out
                 this.input.keyboard.once('keydown-SPACE', () => {
 		            this.tweens.add({
                         targets: mountainL,
@@ -166,10 +172,19 @@
                         ease: 'cubic.in'
                     });
 
+                    this.tweens.add({
+                        targets: rect,
+                        x: -1000,
+                        duration: 1000,
+                        ease: 'cubic.in'
+                    });
+                    
+                    // Small delay before fading out 
                     this.time.addEvent({
                         delay: 1000,
                         callback: ()=>{
                             this.cameras.main.fadeOut(1000, 0, 0, 0)
+                            // Small delay before starting next scene while fading out
                             this.time.addEvent({
                                 delay: 1000,
                                 callback: () => {
@@ -185,18 +200,19 @@
             }
         }
         
+        // The third and final scene of the game
         class SceneC extends Phaser.Scene {
           constructor () {
             super({key: 'sceneC'});
           }   
           preload(){
-            
-
           } 
           create (){
+
+            // Fading into the scene
             this.cameras.main.fadeIn(1000,0,0,0);
 
-            
+            // Adding all the images onto the scene
             const sky = this.add.image(600,-700,'sky'); 
             const cliffTh = this.add.image(870,1500,'cliffThree');
             const cliffT = this.add.image(900,1300,'cliffTwo');
@@ -204,10 +220,11 @@
             const cliffO = this.add.image(((window.innerWidth)/2+275) - 1000 ,(window.innerHeight)-50,'cliffOne');
             const title = this.add.image(1800,150 ,'titleM');
 
+            // Start and options text for the "game"
             const start = this.add.text(1800, 300, 'Start',{fontSize: '50px', fill: '#000'});
             const options = this.add.text(-1400, 400, 'Options',{fontSize: '50px', fill: '#000'});
 
-
+            // Delay the time the audio play to let scene get into place and finish fading in
             this.time.addEvent({
                 delay: 1000,
                 callback: () => {
@@ -216,6 +233,8 @@
                 },
             })
 
+
+            // Adds all the scene images into place
             this.tweens.add({
                 targets: start,
                 x: 800,
@@ -269,11 +288,9 @@
             this.tweens.add({
                 targets: cliffTh,
                 y: 500,
-                duration: 1500,
+                duration: 1400,
                 ease: 'cubic.in'
-            });
-            
-
+            }); 
           } 
 
         }
